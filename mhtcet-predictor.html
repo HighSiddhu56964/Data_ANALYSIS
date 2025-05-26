@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHT CET College Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #e40804;
+            --neon-pink: #b01371;
+            --neon-green: #09fbd3;
+            --neon-purple: #9467fd;
+            --dark-bg: #0f0f1a;
+            --darker-bg: #0a0a12;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 4px solid transparent;
+            border-radius: 10px;
+            background: linear-gradient(var(--dark-bg), var(--dark-bg)) padding-box,
+                        linear-gradient(135deg, var(--neon-blue), var(--neon-pink), var(--neon-green)) border-box;
+            animation: borderGlow 4s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes borderGlow {
+            0% { border-color: var(--neon-blue); opacity: 0.7; }
+            33% { border-color: var(--neon-pink); opacity: 1; }
+            66% { border-color: var(--neon-green); opacity: 0.7; }
+            100% { border-color: var(--neon-blue); opacity: 0.7; }
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(9, 251, 211, 0.7);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+        
+        .predictor-form {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(9, 251, 211, 0.5);
+        }
+        
+        button {
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+            color: black;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 15px rgba(9, 251, 211, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(9, 251, 211, 0.5);
+        }
+        
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            color: #fff;
+            background-color: var(--darker-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background-color: rgba(9, 251, 211, 0.1);
+            color: var(--neon-green);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        tr:hover {
+            background-color: rgba(9, 251, 211, 0.05);
+        }
+        
+        .no-results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 0, 0, 0.1);
+            border-left: 4px solid #f00;
+            color: #ff6b6b;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 1.1rem;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(9, 251, 211, 0.2);
+            box-shadow: 0 0 10px rgba(9, 251, 211, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .predictor-form {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MHT CET College Predictor</h1>
+            <p>Discover which colleges you can get based on your rank and category</p>
+        </header>
+        
+        <div class="predictor-form">
+            <div class="form-group">
+                <label for="rank">Enter Your CET Rank:</label>
+                <input type="number" id="rank" placeholder="e.g., 15234" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Select Your Category:</label>
+                <select id="category" required>
+                    <option value="">--Select--</option>
+                    <option value="OPEN">OPEN</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                </select>
+            </div>
+            
+            <button onclick="predictColleges()">Predict Colleges</button>
+        </div>
+        
+        <div id="results"></div>
+        
+        <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+
+    <script>
+        const collegeData = [
+            { name: "KJ Somaiya Mumbai", branch: "Information Technology", location: "Mumbai", OPEN: 5000, OBC: 8000, SC: 15000, ST: 20000, EWS: 7000 },
+            { name: "MIT Pune", branch: "Civil Engineering", location: "Pune", OPEN: 8000, OBC: 12000, SC: 18000, ST: 22000, EWS: 9000 },
+            { name: "PES Pune", branch: "Mechanical Engineering", location: "Pune", OPEN: 6000, OBC: 10000, SC: 16000, ST: 21000, EWS: 7500 },
+            { name: "SIT Pune", branch: "Electronics and Telecommunication", location: "Pune", OPEN: 9000, OBC: 13000, SC: 19000, ST: 24000, EWS: 9500 },
+            { name: "DJSCE Mumbai", branch: "Computer Engineering", location: "Mumbai", OPEN: 768, OBC: 1324, SC: 1732, ST: 2132, EWS: 1452 },
+            { name: "Thadomal Shahani Mumbai", branch: "Information Technology", location: "Mumbai", OPEN: 11000, OBC: 14000, SC: 20000, ST: 25000, EWS: 12000 },
+            { name: "Fr. Conceicao Rodrigues Mumbai", branch: "Electronics Engineering", location: "Mumbai", OPEN: 12000, OBC: 16000, SC: 21000, ST: 26000, EWS: 13000 },
+            { name: "BVP Pune", branch: "Information Technology", location: "Pune", OPEN: 13000, OBC: 17000, SC: 22000, ST: 27000, EWS: 14000 },
+            { name: "Vivekanand Mumbai", branch: "Civil Engineering", location: "Mumbai", OPEN: 16000, OBC: 20000, SC: 26000, ST: 31000, EWS: 17000 },
+            { name: "Rizvi Mumbai", branch: "Computer Engineering", location: "Mumbai", OPEN: 18000, OBC: 22000, SC: 28000, ST: 33000, EWS: 19000 },
+            { name: "KJ Somaiya Mumbai", branch: "Electronics Engineering", location: "Mumbai", OPEN: 1900, OBC: 2500, SC: 3500, ST: 4000, EWS: 2000 },
+            { name: "SIT Pune", branch: "Information Technology", location: "Pune", OPEN: 2000, OBC: 3000, SC: 4000, ST: 5000, EWS: 2500 },
+            { name: "MIT Pune", branch: "Computer Science", location: "Pune", OPEN: 3000, OBC: 4000, SC: 5000, ST: 6000, EWS: 3500 },
+            { name: "VJTI Mumbai", branch: "Civil Engineering", location: "Mumbai", OPEN: 1321, OBC: 2134, SC: 2987, ST: 3212, EWS: 2098 },
+            { name: "PES Pune", branch: "Information Technology", location: "Pune", OPEN: 5000, OBC: 6000, SC: 7000, ST: 8000, EWS: 5500 },
+            { name: "KJ Somaiya Mumbai", branch: "Mechanical Engineering", location: "Mumbai", OPEN: 6000, OBC: 7000, SC: 8000, ST: 9000, EWS: 6500 },
+            { name: "Thadomal Shahani Mumbai", branch: "Computer Science", location: "Mumbai", OPEN: 7000, OBC: 8000, SC: 9000, ST: 10000, EWS: 7500 },
+            { name: "Fr. Conceicao Rodrigues Mumbai", branch: "Electronics and Telecommunication", location: "Mumbai", OPEN: 8000, OBC: 9000, SC: 10000, ST: 11000, EWS: 8500 },
+            { name: "Sardar Patel Pune", branch: "Civil Engineering", location: "Pune", OPEN: 9000, OBC: 10000, SC: 11000, ST: 12000, EWS: 9500 },
+            { name: "DY Patil Pune", branch: "Information Technology", location: "Pune", OPEN: 10000, OBC: 11000, SC: 12000, ST: 13000, EWS: 10500 },
+            { name: "Vivekanand Mumbai", branch: "Computer Engineering", location: "Mumbai", OPEN: 11000, OBC: 12000, SC: 13000, ST: 14000, EWS: 11500 },
+            { name: "Rizvi Mumbai", branch: "Electronics Engineering", location: "Mumbai", OPEN: 12000, OBC: 13000, SC: 14000, ST: 15000, EWS: 12500 },
+            { name: "BVP Pune", branch: "Mechanical Engineering", location: "Pune", OPEN: 13000, OBC: 14000, SC: 15000, ST: 16000, EWS: 13500 },
+            { name: "DJSCE Mumbai", branch: "Information Technology", location: "Mumbai", OPEN: 873, OBC: 1432, SC: 1890, ST: 2354, EWS:1543 },
+            { name: "KJ Somaiya Mumbai", branch: "Civil Engineering", location: "Mumbai", OPEN: 15000, OBC: 16000, SC: 17000, ST: 18000, EWS: 15500 },
+            { name: "SIT Pune", branch: "Computer Science", location: "Pune", OPEN: 16000, OBC: 17000, SC: 18000, ST: 19000, EWS: 16500 },
+            { name: "PES Pune", branch: "Information Technology", location: "Pune", OPEN: 18000, OBC: 19000, SC: 20000, ST: 21000, EWS: 18500 },
+            { name: "Thadomal Shahani Mumbai", branch: "Computer Science", location: "Mumbai", OPEN: 19000, OBC: 20000, SC: 21000, ST: 22000, EWS: 19500 },
+            { name: "Fr. Conceicao Rodrigues Mumbai", branch: "Civil Engineering", location: "Mumbai", OPEN: 20000, OBC: 21000, SC: 22000, ST: 23000, EWS: 20500 },
+            { name: "Sardar Patel Pune", branch: "Electronics Engineering", location: "Pune", OPEN: 21000, OBC: 22000, SC: 23000, ST: 24000, EWS: 21500 },
+            { name: "DY Patil Pune", branch: "Mechanical Engineering", location: "Pune", OPEN: 22000, OBC: 23000, SC: 24000, ST: 25000, EWS: 22500 },
+            { name: "Vivekanand Mumbai", branch: "Information Technology", location: "Mumbai", OPEN: 23000, OBC: 24000, SC: 25000, ST: 26000, EWS: 23500 },
+            { name: "Rizvi Mumbai", branch: "Computer Engineering", location: "Mumbai", OPEN: 24000, OBC: 25000, SC: 26000, ST: 27000, EWS: 24500 },
+            { name: "BVP Pune", branch: "Electronics and Telecommunication", location: "Pune", OPEN: 25000, OBC: 26000, SC: 27000, ST: 28000, EWS: 25500 },
+            { name: "DJSCE Mumbai", branch: "Civil Engineering", location: "Mumbai", OPEN: 3212, OBC: 4500, SC: 5400, ST: 5460, EWS: 4654 },
+            { name: "KJ Somaiya Mumbai", branch: "Mechanical Engineering", location: "Mumbai", OPEN: 27000, OBC: 28000, SC: 29000, ST: 30000, EWS: 27500 },
+            { name:"MIT Pune" ,branch:"Information Technology", location:"Pune", OPEN: 28000, OBC: 29000, SC: 30000, ST: 31000, EWS: 28500 },
+            { name: "SIT Pune", branch: "Computer Science", location: "Pune", OPEN: 29000, OBC: 30000, SC: 31000, ST: 32000, EWS: 29500 },
+            { name: "PES Pune", branch: "Civil Engineering", location: "Pune", OPEN: 31000, OBC: 32000, SC: 33000, ST: 34000, EWS: 31500 },
+            { name:"KJ Somaiya Mumbai" ,branch:"Information Technology", location:"Mumbai", OPEN: 32000, OBC: 33000, SC: 34000, ST: 35000, EWS: 32500 },
+            { name:"Thadomal Shahani Mumbai" ,branch:"Computer Science", location:"Mumbai", OPEN: 33000, OBC: 34000, SC: 35000, ST: 36000, EWS: 33500 },
+            { name:"Fr. Conceicao Rodrigues Mumbai" ,branch:"Electronics and Telecommunication", location:"Mumbai", OPEN:34000 ,OBC :35000 ,SC :36000 ,ST :37000 ,EWS :34500 },
+            { name:"Sardar Patel Pune" ,branch:"Civil Engineering", location:"Pune", OPEN :35000 ,OBC :36000 ,SC :37000 ,ST :38000 ,EWS :35500 },
+            { name:"DY Patil Pune" ,branch:"Mechanical Engineering", location:"Pune", OPEN :36000 ,OBC :37000 ,SC :3800 ,ST :3900 ,EWS :3650 },
+            { name:"Vivekanand Mumbai" ,branch:"Information Technology", location:"Mumbai", OPEN :3700 ,OBC :3800 ,SC :3900 ,ST :4000 ,EWS :3750 },
+            { name: "COEP Pune", branch: "Computer Engineering", location: "Pune", OPEN: 30, OBC: 270, SC: 400, ST: 600, EWS: 230 },
+            { name: "COEP Pune", branch: "Information Technology", location: "Pune", OPEN: 160, OBC: 422, SC: 605, ST: 560, EWS: 631 },
+            { name: "COEP Pune", branch: "Electronic and TeleCommunication", location: "Pune", OPEN: 250, OBC: 465, SC: 718, ST: 837, EWS: 565 },
+            { name: "COEP Pune", branch: "Electrical Engineering", location: "Pune", OPEN: 456, OBC: 1745, SC: 2051, ST: 2303, EWS: 3327 },
+            { name: "COEP Pune", branch: "Mechanical Engineering", location: "Pune", OPEN: 600, OBC: 802, SC: 2043, ST: 3237, EWS: 7631 },
+            { name: "SPIT Mumbai", branch: "Electronics", location: "Mumbai", OPEN: 10000, OBC: 13000, SC: 17000, ST: 21000, EWS: 11000 },
+            { name: "PCCOE Pune", branch: "Computer Engineering", location: "Pune", OPEN: 3421, OBC: 5321, SC: 6543, ST: 7653, EWS: 8764 },
+            { name: "VJTI Mumbai", branch: "Computer Engineering", location: "Mumbai", OPEN: 101, OBC: 334, SC: 429, ST: 595, EWS: 300 },
+            { name: "VJTI Mumbai", branch: "Information Technology", "location": "Mumbai", OPEN: 207, OBC: 348, SC : 498, ST: 634, EWS: 550 },
+            { name: "VJTI Mumbai", branch: "Electronics and Telecommunication Engineering", location: "Mumbai", OPEN: 353, OBC: 492, SC: 770, ST: 909, EWS: 400 },
+            { name: "VJTI Mumbai", branch: "Electrical Engineering", location: "Mumbai", "OPEN": 400, OBC: 669, SC: 1387, "ST": 14639, "EWS": 720 },
+            { name: "VJTI Mumbai", branch: "Mechanical Engineering", location: "Mumbai", "OPEN": 305, OBC: 502, SC: 1075, "ST": 1240, "EWS": 500 },
+            { name: "PICT Pune", branch: "Computer Engineering", location: "Pune", "OPEN": 342, OBC: 672, SC: 700, "ST": 987, "EWS": 574 },
+            { name: "PICT Pune", branch: "Information Technology", location: "Pune", "OPEN": 423, OBC: 712, SC: 873, "ST": 1511, "EWS": 811 },
+            { name: "PICT Pune", branch: "Electronics and Telecommunication Engineering", location: "Pune", "OPEN": 990, OBC: 1142, SC: 1652, "ST": 1872, "EWS": 1167 },
+            { name: "PICT Pune", branch: "Artificial Intelligence and Data Science", location: "Pune", "OPEN": 512, OBC: 672, SC: 1165, "ST": 1341, "EWS": 752 },
+            { name: "PICT Pune", branch: "Electronics and Computer Engineering", location: "Pune", "OPEN": 780, OBC: 1112, SC: 1900, "ST": 2012, "EWS": 1654 },
+            { name: "SPIT Mumbai", branch: "Computer Engineering", location: "Mumbai", "OPEN": 542, OBC: 763, SC: 1013, "ST":1398, "EWS": 898 },
+            { name: "SPIT Mumbai", branch: "Computer Science and Engineering", location: "Mumbai", "OPEN": 632, OBC: 845, SC: 1374, "ST": 1496, "EWS": 944 },
+            { name: "SPIT Mumbai", branch: "Electronics and Telecommunication Engineering", location: "Mumbai", "OPEN": 997, OBC: 1279, SC: 1631, "ST": 1799, "EWS": 1366 },
+            { name: "SPIT Mumbai", branch: "Artificial Intelligence and Machine Learning", location: "Mumbai", "OPEN": 930, OBC: 1340, SC: 1790, "ST": 1930, "EWS": 1456 },
+            { name: "SPIT Mumbai", branch: "Data Science", location: "Mumbai", "OPEN": 940, OBC: 1200, SC: 1670, "ST": 1890, "EWS": 1543 },
+            { name: "Walchand College of Engineering Sangli", branch: "Computer Science and Engineering", location: "Sangli", "OPEN": 504, OBC: 1000, SC: 1300, "ST": 1600, "EWS": 980 },
+            { name: "Walchand College of Engineering Sangli", branch: "Information Technology", location: "Sangli", "OPEN": 565, OBC: 891, SC: 1232, "ST": 1341, "EWS": 670 },
+            { name: "Walchand College of Engineering Sangli", branch: "Electronics Engineering", location: "Sangli", "OPEN": 790, OBC: 913, SC: 1500, "ST": 1760, "EWS": 979 },
+            { name: "Walchand College of Engineering Sangli", branch: "Mechanical Engineering", location: "Sangli", "OPEN": 979, OBC: 1241, SC: 1343, "ST": 1745, "EWS": 1043 },
+            { name: "Walchand College of Engineering Sangli", branch: "Civil Engineering", location: "Sangli", "OPEN": 1190, OBC: 1354, SC: 1798, "ST": 1983, "EWS": 1243 },
+            { name: "MKSSS's Cummins College of Engineering for Women Pune", branch: "Computer Engineering", location: "Pune", "OPEN": 2160, OBC: 3300, SC: 16448, "ST": 49936, "EWS": 2200 },
+            { name: "MKSSS's Cummins College of Engineering for Women Pune", branch: "Information Technology", location: "Pune", "OPEN": 3337, OBC: 4034, SC: 19186, "ST": 65628, "EWS": 3500 },
+            { name: "MKSSS's Cummins College of Engineering for Women Pune", branch: "Electronics and Telecommunication Engineering", location: "Pune", "OPEN": 5862, OBC: 7141, SC: 27022, "ST": 177191, "EWS": 6000 },
+            { name: "MKSSS's Cummins College of Engineering for Women Pune", branch: "Instrumentation and Control Engineering", location: "Pune", "OPEN": 9989, OBC: 14653, SC: 53750, "ST": 126790, "EWS": 10000 },
+            { name: "MKSSS's Cummins College of Engineering for Women Pune", branch: "Mechanical Engineering", location: "Pune", "OPEN": 9513, OBC: 12086, SC: 41962, "ST": 80236, "EWS": 9500 },
+            { name: "VIT Pune", branch: "Computer Engineering", location: "Pune", "OPEN": 989, OBC: 1698, SC: 2154, "ST": 2453, "EWS": 1897 },
+            { name: "PCCOE Pune", branch: "Civil Engineering", location: "Pune", "OPEN": 19474, OBC: 18340, SC: 19291, "ST": 41175, "EWS": 33664 },
+            { name: "ICT Mumbai", branch: "Chemical Engineering", location: "Mumbai", "OPEN": 1146, OBC: 2695, SC: 5378, "ST": 12842, "EWS": 3145 },
+            { name: "ICT Mumbai", branch: "Pharmaceuticals Chemistry and Technology", location: "Mumbai", "OPEN": 2695, OBC: 5378, SC: 9847, "ST": 19801, "EWS": 6000 },
+            { name: "ICT Mumbai", branch: "Oil, Oleochemicals and Surfactants Technology", location: "Mumbai", "OPEN": 5378, OBC: 9847, SC: 15000, "ST": 22000, "EWS": 8500 },
+            { name: "ICT Mumbai", branch: "Polymer Engineering and Technology", location: "Mumbai", "OPEN": 9847, OBC: 15000, SC: 22000, "ST": 29000, "EWS": 12000 },
+            { name: "ICT Mumbai", branch: "Fibres and Textile Processing Technology", location: "Mumbai", "OPEN": 15000, OBC: 22000, SC: 29000, "ST": 35000, "EWS": 15000 },
+            { name: "GCE Karad", branch: "Civil Engineering", location: "Karad", "OPEN": 6512, OBC: 7650, SC: 8760, "ST": 9870, "EWS": 8200 },
+            { name: "GCE Karad", branch: "Mechanical Engineering", location: "Karad", "OPEN": 5457, OBC: 6530, SC: 7320, "ST": 8420, "EWS": 7650 },
+            { name: "GCE Karad", branch: "Electrical Engineering", location: "Karad", "OPEN": 6589, OBC: 7800, SC: 8900, "ST": 9210, "EWS": 8200 },
+            { name: "GCE Karad", branch: "Electronics and Telecommunication Engineering", location: "Karad", "OPEN": 7089, OBC: 8100, SC: 9230, "ST": 10030, "EWS": 8356 },
+            { name: "GCE Karad", branch: "Information Technology", location: "Karad", "OPEN": 1212, OBC: 1543, SC: 2132, "ST": 2432, "EWS": 1765 },
+            { name: "KIT Kolhapur", branch: "Computer Science and Engineering", location: "Kolhapur", "OPEN": 7662, OBC: 10000, SC: 15000, "ST": 20000, "EWS": 12000 },
+            { name: "KIT Kolhapur", branch: "Artificial Intelligence and Machine Learning", location: "Kolhapur", "OPEN": 11317, OBC: 15000, SC: 20000, "ST": 25000, "EWS": 18000 },
+            { name: "KIT Kolhapur", branch: "Electronics and Telecommunication Engineering", location: "Kolhapur", "OPEN": 18032, OBC: 22000, SC: 27000, "ST": 32000, "EWS": 25000 },
+            { name: "KIT Kolhapur", branch: "Mechanical Engineering", location: "Kolhapur", "OPEN": 47507, OBC: 55000, SC: 65000, "ST": 75000, "EWS": 60000 },
+            { name: "KIT Kolhapur", branch: "Civil Engineering", location: "Kolhapur", "OPEN": 96201, OBC: 110000, SC: 120000, "ST": 130000, "EWS": 115000 },
+            { name: "DY Patil Akurdi", branch: "Computer Engineering", location: "Akurdi", "OPEN": 3031, OBC: 4000, SC: 6000, "ST": 8000, "EWS": 5000 },
+            { name: "DY Patil Akurdi", branch: "Information Technology", location: "Akurdi", "OPEN": 4480, OBC: 6000, SC: 9000, "ST": 11000, "EWS": 7000 },
+            { name: "DY Patil Akurdi", branch: "Electronics and Telecommunication", location: "Akurdi", "OPEN": 10488, OBC: 14000, "SC": 20000, "ST": 25000, "EWS": 18000 },
+            { name: "DY Patil Akurdi", branch: "Mechanical Engineering", location: "Akurdi", "OPEN": 16431, OBC: 22000, "SC": 30000, "ST": 35000, "EWS": 25000 },
+            { name: "DY Patil Akurdi", branch: "Civil Engineering", location: "Akurdi", "OPEN": 22123, OBC: 28000, SC: 35000, "ST": 40000, "EWS": 30000 },
+            { name: "DKTE Ichalkaranji", branch: "Computer Science and Engineering", location: "Ichalkaranji", "OPEN": 11594, OBC: 22132, SC: 30837, "ST": 65475, "EWS": 21465 },
+  { name: "DKTE Ichalkaranji", branch: "Electronics and Telecommunication Engineering", location: "Ichalkaranji", "OPEN": 25357, OBC: 34158, SC: 75472, "ST": 96635, "EWS": 29545 },
+  { name: "DKTE Ichalkaranji", branch: "Mechanical Engineering", location: "Ichalkaranji", "OPEN": 105501, OBC: 127824, SC: 121184, "ST": 122434, "EWS": 121184 },
+  { name: "DKTE Ichalkaranji", branch: "Civil Engineering", location: "Ichalkaranji", "OPEN": 13808, OBC: 124823, SC: 27754, "ST": 27754, "EWS": 27754 },
+  { name: "SCOE Vadgaon", branch: "Computer Engineering", location: "Vadgaon", "OPEN": 5728, OBC: 9697, SC: 17110, "ST": 44232, "EWS": 9168 },
+  { name: "SCOE Vadgaon", branch: "Information Technology", location: "Vadgaon", "OPEN": 6723, OBC: 10436, SC: 17268, "ST": 53839, "EWS": 10980 },
+  { name: "SCOE Vadgaon", branch: "Electronics & Telecommunication", location: "Vadgaon", "OPEN": 14798, OBC: 22880, SC: 32612, "ST": 22852, "EWS": 17147 },
+  { name: "SCOE Vadgaon", branch: "Mechanical Engineering", location: "Vadgaon", "OPEN": 127222,OBC: 65341, SC: 62991, "ST": 44232, "EWS": 62991 },
+  { name: "SCOE Vadgaon", branch: "Civil Engineering", location: "Vadgaon", "OPEN": 126043, OBC: 114256, SC: 98122, "ST": 116845, "EWS": 94143 },
+  { name: "SGGSIE&T Nanded", branch: "Computer Science and Engineering", location: "Nanded", "OPEN": 11453, OBC: 20306, SC: 43283, "ST": 76039, "EWS": 14136 },
+  { name: "SGGSIE&T Nanded", branch: "Information Technology", location: "Nanded", "OPEN": 14136, OBC: 20306, SC: 43283, "ST": 76039, "EWS": 11453 },
+  { name: "SGGSIE&T Nanded", branch: "Electronics and Telecommunication Engineering", location: "Nanded", "OPEN": 20306, OBC: 43283, SC: 76039, "ST": 11453, "EWS": 14136 },
+  { name: "SGGSIE&T Nanded", branch: "Electrical Engineering", location: "Nanded", "OPEN": 26385, OBC: 43283, SC: 76039, "ST": 11453, "EWS": 14136 },
+  { name: "SGGSIE&T Nanded", branch: "Mechanical Engineering", location: "Nanded", "OPEN": 36051, OBC: 43283, SC: 76039, "ST": 11453, "EWS": 14136 },
+  { name: "RIT Sangli", branch: "Computer Engineering", location: "Sangli", "OPEN": 180000, OBC: 34600, SC: 34599, "ST": 72040, "EWS": 360000 },
+  { name: "RIT Sangli", branch: "Electronics and Telecommunication Engineering", location: "Sangli", "OPEN": 360000, OBC: 540000, SC: 72000, "ST": 90000, "EWS": 54000 },
+  { name: "RIT Sangli", branch: "Mechanical Engineering", location: "Sangli", "OPEN": 50040, OBC: 72000, SC: 90000, "ST": 10080, "EWS": 72000 },
+  { name: "RIT Sangli", branch: "Civil Engineering", location: "Sangli", "OPEN": 72000, OBC: 90000, SC: 100080, "ST": 120060, "EWS": 90000 },
+  { name: "RIT Sangli", branch: "Computer Science and Engineering", location: "Sangli", "OPEN": 90000, OBC: 100080, SC: 126000, "ST": 144000, "EWS": 100080 }
+    ];
+
+    function predictColleges() {
+      const rank = parseInt(document.getElementById("rank").value);
+      const category = document.getElementById("category").value;
+      const resultDiv = document.getElementById("results");
+      resultDiv.innerHTML = "";
+
+      if (isNaN(rank) || !category) {
+        resultDiv.innerHTML = '<p class="no-results">Please enter valid inputs.</p>';
+        return;
+      }
+
+      const filtered = collegeData.filter(college => college[category] >= rank);
+
+      if (filtered.length === 0) {
+        resultDiv.innerHTML = '<p class="no-results">No colleges found for this rank and category.</p>';
+        return;
+      }
+
+      let html = '<table><tr><th>College Name</th><th>Branch</th><th>Location</th><th>Cutoff Rank</th></tr>';
+      filtered.sort((a, b) => a[category] - b[category]).forEach(college => {
+        html += `<tr><td>${college.name}</td><td>${college.branch}</td><td>${college.location}</td><td>${college[category]}</td></tr>`;
+      });
+      html += '</table>';
+
+      resultDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

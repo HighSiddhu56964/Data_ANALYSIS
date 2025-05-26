@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Anaylsis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #08f7fe;
+            --neon-pink: #fe53bb;
+            --neon-green: #09fbd3;
+            --neon-purple: #9467fd;
+            --dark-bg: #0f0f1a;
+            --darker-bg: #0a0a12;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 4px solid transparent;
+            border-radius: 10px;
+            background: linear-gradient(var(--dark-bg), var(--dark-bg)) padding-box,
+                        linear-gradient(135deg, var(--neon-blue), var(--neon-pink), var(--neon-green)) border-box;
+            animation: borderGlow 4s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes borderGlow {
+            0% { border-color: var(--neon-blue); opacity: 0.7; }
+            33% { border-color: var(--neon-pink); opacity: 1; }
+            66% { border-color: var(--neon-green); opacity: 0.7; }
+            100% { border-color: var(--neon-blue); opacity: 0.7; }
+        }
+        
+        .predictor-section {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mhtcet-section {
+            border-right: 1px solid rgba(9, 251, 211, 0.3);
+        }
+        
+        .jee-section {
+            border-left: 1px solid rgba(254, 83, 187, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .mhtcet-section .section-title {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(9, 251, 211, 0.7);
+        }
+        
+        .jee-section .section-title {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(254, 83, 187, 0.7);
+        }
+        
+        .predictor-card {
+            background-color: var(--darker-bg);
+            padding: 40px 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .mhtcet-section .predictor-card {
+            border-bottom: 4px solid var(--neon-green);
+        }
+        
+        .jee-section .predictor-card {
+            border-bottom: 4px solid var(--neon-pink);
+        }
+        
+        .predictor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+        
+        .mhtcet-section .predictor-card:hover {
+            box-shadow: 0 10px 30px rgba(9, 251, 211, 0.3);
+        }
+        
+        .jee-section .predictor-card:hover {
+            box-shadow: 0 10px 30px rgba(254, 83, 187, 0.3);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .mhtcet-section .card-icon {
+            color: var(--neon-green);
+        }
+        
+        .jee-section .card-icon {
+            color: var(--neon-pink);
+        }
+        
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .card-description {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .exam-info {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .exam-info h3 {
+            color: var(--neon-blue);
+            border-bottom: 1px solid rgba(8, 247, 254, 0.3);
+            padding-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+        
+        .feature-card {
+            background-color: var(--darker-bg);
+            padding: 20px;
+            border-radius: 8px;
+            width: 22%;
+            min-width: 200px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(148, 103, 253, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(148, 103, 253, 0.3);
+            border-color: var(--neon-purple);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-purple);
+        }
+        
+        .feature-card h3 {
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+        }
+        
+        .neon-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .mhtcet-section, .jee-section {
+                border: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .feature-card {
+                width: 45%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- MHT CET Section -->
+        <div class="predictor-section mhtcet-section">
+            <h1 class="section-title neon-pulse">MHT CET Predictor</h1>
+            
+            <a href="mhtcet-predictor.html" class="predictor-card">
+                <div class="card-icon">📊</div>
+                <h2 class="card-title">MHT CET Calculator</h2>
+                <p class="card-description">Click to open the MHT CET percentile predictor</p>
+            </a>
+            
+            <div class="exam-info">
+                <h3>About MHT CET</h3>
+                <p>MHT CET (Maharashtra Common Entrance Test) is a state-level entrance exam for admission to engineering and pharmacy courses in Maharashtra. The exam is conducted by the State Common Entrance Test Cell, Maharashtra.</p>
+                <p><strong>Exam Pattern:</strong> Physics, Chemistry, Mathematics/Biology (100 questions each, 100 marks each)</p>
+                <p><strong>Duration:</strong> 90 minutes per section</p>
+            </div>
+        </div>
+        
+        <!-- JEE Section -->
+        <div class="predictor-section jee-section">
+            <h1 class="section-title neon-pulse">JEE Predictor</h1>
+            
+            <a href="jee-predictor.html" class="predictor-card">
+                <div class="card-icon">📈</div>
+                <h2 class="card-title">JEE Calculator</h2>
+                <p class="card-description">Click to open the JEE percentile predictor</p>
+            </a>
+            
+            <div class="exam-info">
+                <h3>About JEE</h3>
+                <p>JEE (Joint Entrance Examination) is a national level engineering entrance exam conducted for admission to various engineering colleges in India, including NITs, IIITs, and other Centrally Funded Technical Institutions (CFTIs).</p>
+                <p><strong>Exam Pattern:</strong> Physics, Chemistry, Mathematics (25 questions each, 100 marks each)</p>
+                <p><strong>Duration:</strong> 3 hours</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Features Section -->
+     
+    <div class="features">
+      
+        <div class="feature-card">
+          <a href="https://fe2023.mahacet.org/StaticPages/frmInstituteList?did=1884 " target="_blank" class="feature-card"></a>
+            <div class="feature-icon">🏛️</div>
+            <h3>College Database</h3>
+            <p>Access our comprehensive database of 500+ engineering colleges with detailed information on cutoffs, fees, and placements.</p>
+        </div>
+        
+        
+        <div class="feature-card">
+          <a href="https://fe2024.mahacet.org/2023/2023ENGG_CAP1_CutOff.pdf"target="_blank" class="feature-card"></a>
+            <div class="feature-icon">📅</div>
+            <h3>Cutoff Trends</h3>
+            <p>View historical cutoff trends for the past 5 years to better understand admission patterns.</p>
+        </div>
+        
+        
+        
+        <div class="feature-card">
+          <a href="https://chatgpt.com"target="_blank" class="feature-card"></a>
+            <div class="feature-icon">🤖</div>
+            <h3>AI Recommendations</h3>
+            <p>Get personalized college recommendations based on your scores, budget, and preferences.</p>
+        </div>
+    </div>
+</body>
+</html>
